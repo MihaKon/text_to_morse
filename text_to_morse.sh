@@ -46,15 +46,6 @@ translate_char_to_morse() {
 }
 
 translate_to_morse() {
-	input="$1"
-	output=""
-	for((i=0; i<${#input}; i++)); do
-		char="${input:i:1}"
-		output="${output}$(translate_char_to_morse "$char")"
-	done
-	echo "$output"
-}
-translate_to_morse_using_custom() {
     repl="$1"
     input="$2"
     output=""
@@ -65,17 +56,18 @@ translate_to_morse_using_custom() {
         for replacement in "${replacements[@]}"; do
             IFS=":" read -r custom_char morse <<< "$replacement"
             if [ "$char" == "$custom_char" ]; then
-                output="${output}${morse}"
+                output="${output} ${morse}"
                 replaced=true
                 break
             fi
         done
         if [ "$replaced" == false ]; then
-            output="${output}$(translate_char_to_morse "$char")"
+            output="${output} $(translate_char_to_morse "$char")"
         fi
     done
     echo "$output"
 }
+
 display_help() {
 	echo "Translates text to morse code."
 	echo "./text_to_morse.sh [-h] [-r <input_file>] [-w <output_file>]"
@@ -127,11 +119,8 @@ else
 	input_text=${input_text^^}
 fi
 
-if [[ $custom_replacement != '' ]]; then
-	morse_code=$(translate_to_morse_using_custom "$custom_replacement" "$input_text")
-else
-	morse_code=$(translate_to_morse "$input_text")
-fi
+morse_code=$(translate_to_morse "$custom_replacement" "$input_text")
+
 
 if [[ $output_file != '' ]]; then
 	echo "Script may overwrite files!"
