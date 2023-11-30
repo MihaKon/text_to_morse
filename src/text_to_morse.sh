@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 translate_char_to_morse() {
     case "$1" in
@@ -125,7 +125,7 @@ morse_code=$(translate_to_morse "$custom_replacement" "$input_text")
 if [[ $output_file != '' ]]; then
 	echo "Script may overwrite files!"
 	y_or_n
-	echo $morse_code > $output_file
+	echo $morse_code > "$output_file"
 	echo "Morse code successfully saved to '$output_file'"
 else
 	echo $morse_code
